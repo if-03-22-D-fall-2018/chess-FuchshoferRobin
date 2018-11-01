@@ -1,23 +1,29 @@
 /*----------------------------------------------------------
- *				HTBLA-Leonding / Klasse: 2AHDV
+ *				HTBLA-Leonding / Klasse: 2DHIF
  * ---------------------------------------------------------
  * Exercise Number: 0
  * Title:			chess.h
- * Author:			P. Bauer
+ * Author:			Robin Fuchshofer
  * Due Date:		October 15, 2014
  * ----------------------------------------------------------
  * Description:
  * Basic chess functions.
  * ----------------------------------------------------------
  */
+#include <stdbool.h>
 
-enum Colour {White, Black};
+enum PieceColor { White, Black };
 enum PieceType{
   Pawn, Knight, Rook, Bishop, Queen, King, NoPiece
 };
+
+enum MoveType{
+  NormalMove, CaptureMove
+};
+
 struct ChessPiece{
-  enum Colour colour;
-  enum PieceType piece;
+  enum PieceColor color;
+  enum PieceType type;
 };
 
 struct ChessSquare{
@@ -25,11 +31,11 @@ struct ChessSquare{
   struct ChessPiece piece;
 };
 
+typedef struct ChessSquare ChessBoard[8][8];
+typedef char File;
+typedef int Rank;
 
-typedef ChessSquare ChessBoard[8][8];
-
-
-bool is_piece(struct ChessPiece board ,enum Colour color, enum PieceType);
+bool is_piece(struct ChessPiece board ,enum PieceColor color, enum PieceType type);
 
 void init_chess_board(ChessBoard chess_board);
 
@@ -40,3 +46,21 @@ bool is_square_occupied(ChessBoard chess_board, int file, int rank);
 bool add_piece(ChessBoard chess_board, char a, int one, struct ChessPiece black_rook);
 
 ChessPiece get_piece(ChessBoard chess_board,char a, int one);
+
+void setup_chess_board(ChessBoard chess_board);
+
+bool remove_piece(ChessBoard chess_board, File file,Rank rank);
+
+bool squares_share_file(File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_rank(File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_diagonal(File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_knights_move(File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_kings_move(File file, Rank rank, File file02, Rank rank02);
+
+bool squares_share_queens_move(File file, Rank rank, File file02, Rank rank02);
