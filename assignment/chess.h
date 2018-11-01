@@ -13,11 +13,11 @@
 
 enum Colour {White, Black};
 enum PieceType{
-  Pawn, Knight, Rook, Bishop, Queen, King
+  Pawn, Knight, Rook, Bishop, Queen, King, NoPiece
 };
 struct ChessPiece{
-  enum Colour color;
-  enum ChessPiece piece;
+  enum Colour colour;
+  enum PieceType piece;
 };
 
 struct ChessSquare{
@@ -25,9 +25,18 @@ struct ChessSquare{
   struct ChessPiece piece;
 };
 
+
 typedef ChessSquare ChessBoard[8][8];
 
 
-bool is_piece(struct ChessPiece board ,enum Colour color, enum PieceType, type)
+bool is_piece(struct ChessPiece board ,enum Colour color, enum PieceType);
 
 void init_chess_board(ChessBoard chess_board);
+
+ChessSquare* get_square(ChessBoard chess_board, int file, int rank);
+
+bool is_square_occupied(ChessBoard chess_board, int file, int rank);
+
+bool add_piece(ChessBoard chess_board, char a, int one, struct ChessPiece black_rook);
+
+ChessPiece get_piece(ChessBoard chess_board,char a, int one);
