@@ -14,22 +14,146 @@
  #include "general.h"
  #include "chess.h"
 
- bool 	is_square_ok (File file, Rank rank);
- int 	nr (Rank rank);
- int 	nf (File file);
- bool 	is_move_from_base_line (enum PieceColor color, Rank rank);
- bool 	is_piece (struct ChessPiece pc, enum PieceColor color, enum PieceType type);
- void 	init_chess_board (ChessBoard chess_board);
- struct ChessSquare * 	get_square (ChessBoard chess_board, File file, Rank rank);
- bool 	is_square_occupied (ChessBoard chess_board, File file, Rank rank);
- bool 	add_piece (ChessBoard chess_board, File file, Rank rank, struct ChessPiece piece);
- struct ChessPiece 	get_piece (ChessBoard chess_board, File file, Rank rank);
- void 	setup_chess_board (ChessBoard chess_board);
- bool 	remove_piece (ChessBoard chess_board, File file, Rank rank);
- bool 	squares_share_file (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_rank (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_knights_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_pawns_move (enum PieceColor color, enum MoveType move, File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_queens_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
- bool 	squares_share_kings_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r);
+ //bool 	is_square_ok (File file, Rank rank);
+ //int 	nr (Rank rank);
+ //int 	nf (File file);
+ //bool 	is_move_from_base_line (enum PieceColor color, Rank rank);
+
+ bool is_piece(struct ChessPiece board ,enum PieceColor color, enum PieceType type)
+{
+  return(board.type == type && board.color == color);
+}
+
+ ChessSquare* get_square(ChessBoard chess_board, int file, int rank)
+ {
+   if((file > 'h' || file < 'a') || (rank > 8 || rank < 1))
+   {
+     return 0;
+   }
+   return &chess_board[rank-1][file-97];
+
+ }
+
+ bool is_square_occupied(ChessBoard chess_board, int file, int rank)
+ {
+   int int_file = file - 97;
+
+   return chess_board[rank-1][int_file].is_occupied;
+ }
+
+ bool add_piece(ChessBoard chess_board, char a, int one, struct ChessPiece black_rook)
+ {
+   if((a > 'h' || a < 'a') || (one > 8 || one < 1) || chess_board[one-1][a - 97].is_occupied)
+   {
+     return false;
+   }
+
+   chess_board[one-1][a - 97].is_occupied = true;
+   chess_board[one-1][a -97].piece = black_rook;
+
+   return true;
+
+ }
+
+ ChessPiece get_piece(ChessBoard chess_board,char a, int one)
+ {
+   if(a - 97 > 8 || a - 97 < 0 || one > 8 || one < 0 || chess_board[a-97][one].is_occupied == true)
+   {
+     chess_board[one][a - 97].piece.type = NoPiece;
+     return chess_board[one][a - 97].piece;
+   }
+
+   return chess_board[one][a -97].piece;
+
+ }
+
+
+ void init_chess_board(ChessBoard chess_board)
+ {
+   for (int i = 0; i < 8; i++) {
+
+     for (int j = 0; j < 8; j++) {
+
+       chess_board[i][j].is_occupied = false;
+
+       chess_board[i][j].piece.type = NoPiece;
+
+     }
+   }
+ }
+
+ void setup_chess_board(ChessBoard chess_board)
+ {
+
+   init_chess_board(chess_board);
+
+   File file;
+
+   for (file = 'a'; file <= 'h'; file++) {
+         add_piece(chess_board, file, 2, {White,Pawn});
+         add_piece(chess_board, file, 7, {Black, Pawn});
+       }
+
+   add_piece(chess_board, 'a', 1, {White, Rook});
+   add_piece(chess_board, 'h', 1, {White, Rook});
+   add_piece(chess_board, 'b', 1, {White, Knight});
+   add_piece(chess_board, 'g', 1, {White, Knight});
+   add_piece(chess_board, 'c', 1, {White, Bishop});
+   add_piece(chess_board, 'f', 1, {White, Bishop});
+   add_piece(chess_board, 'd', 1, {White, Queen});
+   add_piece(chess_board, 'e', 1, {White, King});
+   add_piece(chess_board, 'a', 8, {Black, Rook});
+   add_piece(chess_board, 'h', 8, {Black, Rook});
+   add_piece(chess_board, 'b', 8, {Black, Knight});
+   add_piece(chess_board, 'g', 8, {Black, Knight});
+   add_piece(chess_board, 'c', 8, {Black, Bishop});
+   add_piece(chess_board, 'f', 8, {Black, Bishop});
+   add_piece(chess_board, 'd', 8, {Black, Queen});
+ }
+
+ bool remove_piece(ChessBoard chess_board, File file,Rank rank)
+ {
+   if(file - 97 > 8 || file - 97 < 0 || rank > 8 || rank < 0 || chess_board[file-97][rank].is_occupied == true)
+   {
+     chess_board[rank][file - 97].is_occupied = false;
+     chess_board[rank][file - 97].piece.type = NoPiece;
+
+     return true;
+   }
+   return false;
+ }
+
+ bool squares_share_file(File file, Rank rank, File file02, Rank rank02)
+ {
+   return(file - 97 == file02 -97);
+ }
+
+ bool squares_share_rank(File file, Rank rank, File file02, Rank rank02)
+ {
+   return(rank == rank02);
+ }
+
+ bool squares_share_diagonal(File file, Rank rank, File file02, Rank rank02)
+ {
+   return file-file02-'a'*2==rank-rank02;
+ }
+
+ bool squares_share_knights_move(File file, Rank rank, File file02, Rank rank02)
+ {
+   return false;
+ }
+
+ bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File file, Rank rank, File file02, Rank rank02)
+ {
+   return false;
+ }
+
+ bool squares_share_kings_move(File file, Rank rank, File file02, Rank rank02)
+ {
+   return false;
+ }
+
+ bool squares_share_queens_move(File file, Rank rank, File file02, Rank rank02)
+ {
+   return false;
+ }

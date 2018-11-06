@@ -10,9 +10,13 @@
  * Basic chess functions.
  * ----------------------------------------------------------
  */
-#include <stdbool.h>
+ #include <stdbool.h>
+
+ #ifndef ___CHESS_H
+ #define ___CHESS_H
 
 enum PieceColor { White, Black };
+
 enum PieceType{
   Pawn, Knight, Rook, Bishop, Queen, King, NoPiece
 };
@@ -64,3 +68,5 @@ bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File f
 bool squares_share_kings_move(File file, Rank rank, File file02, Rank rank02);
 
 bool squares_share_queens_move(File file, Rank rank, File file02, Rank rank02);
+
+#endif
