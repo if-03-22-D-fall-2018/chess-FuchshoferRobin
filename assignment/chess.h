@@ -47,7 +47,7 @@ ChessSquare* get_square(ChessBoard chess_board, int file, int rank);
 
 bool is_square_occupied(ChessBoard chess_board, int file, int rank);
 
-bool add_piece(ChessBoard chess_board, char a, int one, struct ChessPiece black_rook);
+bool add_piece(ChessBoard chess_board, char a, int one, struct ChessPiece piece);
 
 ChessPiece get_piece(ChessBoard chess_board,char a, int one);
 
