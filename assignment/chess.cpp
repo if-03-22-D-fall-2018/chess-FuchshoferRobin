@@ -20,9 +20,9 @@
  //bool 	is_move_from_base_line (enum PieceColor color, Rank rank);
 
  bool is_piece(struct ChessPiece board ,enum PieceColor color, enum PieceType type)
-{
-  return(board.type == type && board.color == color);
-}
+ {
+   return(board.type == type && board.color == color);
+ }
 
  ChessSquare* get_square(ChessBoard chess_board, int file, int rank)
  {
@@ -146,12 +146,36 @@
      return false;
    }
 
+   int dv;
+   int dh;
+
+   if(file - file02 < 0)
+   {
+     dv = (file - file02) * -1;
+   }
+
+   if(rank - rank02 < 0)
+   {
+     dh = (rank - rank02) * -1;
+   }
+
+   return dv = dh;
 
  }
 
  bool squares_share_knights_move(File file, Rank rank, File file02, Rank rank02)
  {
+   if(file > 'h' || file < 'a' || rank > 8 || rank < 1 || file02 > 'h' || file02  < 'a' || rank02 > 8 || rank02 < 1)
+   {
+     return false;
+   }
+
+   if(file )
+   {
+     return true;
+   }
    return false;
+
  }
 
  bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File file, Rank rank, File file02, Rank rank02)
