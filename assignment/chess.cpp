@@ -169,26 +169,69 @@
    {
      return false;
    }
-
-   if(file )
-   {
-     return true;
-   }
-   return false;
-
+   return ((file02 == file+1 && rank02 == rank+2) || (file02 == file-1 && rank02 == rank-2) || (file02 == file-2 && rank02 == rank-1) || (file02 == file+2 && rank02 == rank+1)
+   || (file02 == file-1 && rank02 == rank+2) || (file02 == file+1 && rank02 == rank-2)|| (file02 == file+2 && rank02 == rank-1) || (file02 == file-2 && rank02 == rank+1));
  }
 
  bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File file, Rank rank, File file02, Rank rank02)
  {
-   return false;
+
+   if (move == NormalMove)
+   {
+     if (rank == 1 || rank == 8)
+     {
+       return false;
+     }
+     if (color == Black && rank == 7)
+     {
+       return ((rank02 == rank-2 && file02 == file) || (rank02 == rank-1 && file02 == file));
+     }
+     else if (color == White && rank == 2)
+     {
+       return ((rank02 == rank+2 && file02 == file) || (rank02 == rank+1 && file02 == file));
+     }
+     if (color == Black && rank >= 4)
+     {
+       return (rank02 == rank-1 && file02 == file);
+     }
+     else if (color == White && rank <= 4)
+     {
+       return (rank02 == rank+1 && file02 == file);
+     }
+
+   }
+
+   if (move == CaptureMove)
+   {
+     if (color == Black)
+     {
+       return (file02 == file+1 && rank02 == rank-1) || (file02 == file-1 && rank02 == rank-1);
+     }
+     else
+     {
+       return (file02 == file-1 && rank02 == rank+1) || (file02 == file+1 && rank02 == rank+1);
+     }
+   }
+
+return false;
+
  }
 
  bool squares_share_kings_move(File file, Rank rank, File file02, Rank rank02)
  {
-   return false;
+   if(file > 'h' || file < 'a' || rank > 8 || rank < 1 || file02 > 'h' || file02  < 'a' || rank02 > 8 || rank02 < 1)
+   {
+     return false;
+   }
+   return squares_share_rank(file,rank,file02,rank02) || squares_share_file(file,rank,file02,rank02) || squares_share_diagonal(file,rank,file02,rank02);
+
  }
 
  bool squares_share_queens_move(File file, Rank rank, File file02, Rank rank02)
  {
-   return false;
+   if(file > 'h' || file < 'a' || rank > 8 || rank < 1 || file02 > 'h' || file02  < 'a' || rank02 > 8 || rank02 < 1)
+   {
+     return false;
+   }
+   return squares_share_rank(file,rank,file02,rank02) || squares_share_file(file,rank,file02,rank02) || squares_share_diagonal(file,rank,file02,rank02);
  }
